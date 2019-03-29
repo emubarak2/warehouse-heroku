@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sec="http://www.springframework.org/security/tags">
+    <f:view>
+        <h:head>
+            <meta charset="utf-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+            <title>Deals Warehouse Dashboard</title>
+            <link rel="shortcut icon" type="image/x-icon" href="/img/icon.ico" />
+            <!-- Bootstrap core CSS-->
+            <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+            <!-- Custom fonts for this template-->
+            <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+            <!-- Page level plugin CSS-->
+            <link href="/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet"/>
+            <!-- Custom styles for this template-->
+            <link href="/css/sb-admin.css" rel="stylesheet"/>
+            <style>
+                .ui-button.custom-pf-button { 
+                    width: 100%; 
+                    height: 35px; 
+                    font-size:small;    
+                }
+                span.ui-column-title {
+                    font-size: small;
+                }
+                .table thead th {
+                    vertical-align: top; 
+                    border-bottom: 2px solid #e9ecef;
+                }
+                .ui-growl {
+                    z-index: 9999 !important;
+                }
+            </style>
+        </h:head>
+        <h:body class="fixed-nav sticky-footer bg-dark sidenav-toggled" id="page-top">
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <h2 style="text-align: center; width: 100%">Please wait ...</h2>
+                <p:graphicImage name="/img/loading.gif" />
+            </p:dialog>
+
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+                <a class="navbar-brand" href="/">Warehouse Dashboard</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav navbar-sidenav" id="dashboardAccordion">
+                        <sec:authorize  access="hasRole('ROLE_USER_VALIDATION') or hasRole('ROLE_ADMIN')">
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Items">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#dashboardAccordion">
+                                    <i class="fa fa-fw fa-table"></i>
+                                    <span class="nav-link-text">Items</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="collapseComponents">
+
+                                    <li>
+                                        <a href="/items-validation">Items validation</a>
+                                    </li>
+
+                                    <sec:authorize  access="hasRole('ROLE_USER_UPLOAD') or hasRole('ROLE_ADMIN')">
+                                        <li>
+                                            <a href="/ean-upload">Items upload</a>
+                                        </li>
+                                    </sec:authorize>
+
+                                    <sec:authorize  access="hasRole('ROLE_USER_SPY_ON_DEMAND') or hasRole('ROLE_ADMIN')">
+                                        <li>
+                                            <a href="/spy-on-demand">Spy on demand</a>
+                                        </li>
+                                    </sec:authorize>
+
+                                    <sec:authorize  access="hasRole('ROLE_ADMIN')">
+                                        <li>
+                                            <a href="/item-rules">Item rules</a>
+                                        </li>
+                                    </sec:authorize>
+
+                                </ul>
+                            </li>
+                        </sec:authorize>
+                        <sec:authorize  access="hasRole('ROLE_USER_REPORTING') or hasRole('ROLE_ADMIN')">
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Reports">
+                                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#reportsList" data-parent="#dashboardAccordion">
+                                    <i class="fa fa-fw fa-area-chart "></i>
+                                    <span class="nav-link-text">Reports</span>
+                                </a>
+                                <ul class="sidenav-second-level collapse" id="reportsList">
+                                    <li>
+                                        <a href="/report-all">Full reports</a>
+                                    </li>
+
+                                    <sec:authorize  access="hasRole('ROLE_ADMIN')">
+                                        <li>
+                                            <a href="/pulse">Check pulse</a>
+                                        </li>
+                                    </sec:authorize>
+
+
+                                </ul>
+                            </li>
+                        </sec:authorize>
+
+                        <sec:authorize  access="hasRole('ROLE_ADMIN_DB')">
+                            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Query">
+                                <a class="nav-link" href="/query">
+                                    <i class="fa fa-fw fa-database"></i>
+                                    <span class="nav-link-text">Query</span>
+                                </a>
+                            </li>
+                        </sec:authorize>
+
+
+                    </ul>
+                    <ul class="navbar-nav sidenav-toggler">
+                        <li class="nav-item">
+                            <a class="nav-link text-center" id="sidenavToggler">
+                                <i class="fa fa-fw fa-angle-left"></i>
+
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+            <div class="content-wrapper">
+                <div class="container-fluid">
+                    <p:growl id="messagesDilog"/>
+                    <ui:insert name="content" />
+                </div>
+
+            </div>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!--<script src="v/endor/datatables/jquery.dataTables.js"></script>-->
+            <!--<script src="/vendor/datatables/dataTables.bootstrap4.js"></script>-->
+            <!--&lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+            <!--<script src="/js/sb-admin.min.js"></script>-->
+            <!--&lt;!&ndash; Custom scripts for this page&ndash;&gt;-->
+            <!--<script src="/js/sb-admin-datatables.min.js"></script>-->
+        </h:body>
+    </f:view>
+</html>

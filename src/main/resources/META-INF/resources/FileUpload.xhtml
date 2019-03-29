@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:color="http://java.sun.com/jsf/html"
+>
+
+<h:head>
+
+    <!-- For Bootstrap responsive grid -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+
+</h:head>
+
+<h:body>
+    <ui:composition template="layout.xhtml">
+        <ui:define name="content">
+            <style>
+                .column1 {
+                    width: 50%;
+
+                }
+
+                .ui-growl-message {
+                    width: 100% !important;
+                }
+            </style>
+
+
+            <div class="alert alert-light">
+                <strong>Please follow the following steps to import deal sheet into datawarehouse</strong>
+                <ul>
+                    <li>Click on "Select file" and select the CSV file</li>
+                    <li>Click on "CSV (.CSV only) sheet"</li>
+                    <li>Click on "Import File" and wait until the importing process finishs</li>
+                    <li>
+                        <strong>Please note that a report message will appear about importing status.</strong>
+                    </li>
+                </ul>
+            </div>
+
+            <h:form enctype="multipart/form-data">
+                <p:fileUpload id="promotionSheet"  label="Select file"
+                              value="#{fileUploadMB.uploadedFileStream}"
+                              fileUploadListener="#{fileUploadMB.fileUploadAction}"
+                              update="@this, messagesDilog fileName,usePanelGroup"
+                              mode="advanced" auto="true" fileLimit="1" allowTypes="/(\.|\/)(csv)$/"
+                              requiredMessage="Deals Sheet is requried" required="true"
+                              process="@this, messagesDilog fileName"
+                />
+                <p:growl id="message" showDetail="true"/>
+                <p:outputLabel id="fileName" value="#{fileUploadMB.fileName}"/>
+                <br/>
+                <p:commandButton value="Import sheet"
+                                 action="#{fileUploadMB.processFile}" icon="ui-icon-check" update="report"/>
+            </h:form>
+
+            <p:dialog modal="true" widgetVar="statusDialog" header="Importing in progress" draggable="false" closable="false"
+                      resizable="false">
+                <p:panel rendered="#{fileUploadMB.stringReport}"/>
+            </p:dialog>
+
+            <br/>
+            <h:panelGroup id="usePanelGroup" ajaxRendered="true" widgetVar="test">
+                <br/>
+                    <h:outputText  escape="false" style="color: red" id="report" value="#{fileUploadMB.stringReport}"/>
+                    <p:panel rendered="#{fileUploadMB.stringReport}"/>
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+

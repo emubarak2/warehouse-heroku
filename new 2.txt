@@ -1,0 +1,13 @@
+convert utilty to service
+convert utility to service
+
+change the method name to getFileId(){ 
+
+}
+write try and catch to catch the exception from fiding the next file id
+change the method in the enum class to the default one : value of
+
+move the date utility and it exception inside the validation, and remove the exception 
+move the logic of adding the file index to be inisde the CsvParser
+move the validation logic to utility  : make one large method isValid() 
+Add new class CsvValidation , it will take records : service

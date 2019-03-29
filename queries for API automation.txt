@@ -1,0 +1,33 @@
+Query for API validator 
+
+
+CREATE TABLE `project` (
+  `project_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`project_name`)
+);
+
+
+CREATE TABLE api (
+  id BIGINT  NOT NULL,
+  url VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id),
+  project_name VARCHAR(50),
+CONSTRAINT project_name_ref
+	FOREIGN KEY (project_name)
+	REFERENCES project(project_name)
+);
+
+CREATE TABLE test (
+  id BIGINT  NOT NULL,
+  api_id BIGINT NOT NULL,
+  headres  TEXT,
+  user VARCHAR(50),
+  method VARCHAR(10) NOT NULL,
+  request_body TEXT,
+  response_type TEXT, 
+  PRIMARY KEY (id),
+  project_name VARCHAR(50),
+CONSTRAINT project_name_ref
+	FOREIGN KEY (project_name)
+	REFERENCES project(project_name)
+);

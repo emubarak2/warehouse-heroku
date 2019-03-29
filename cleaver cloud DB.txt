@@ -1,0 +1,9 @@
+clever could database : 
+spring.datasource.warehouse.jdbcUrl=jdbc:mysql://${DB_HOST_PORT_WAREHOUSE:bdtvssl9kz92sjthg840-mysql.services.clever-cloud.com:3306}/${DB_SCHEMA_WAREHOUSE:bdtvssl9kz92sjthg840}
+spring.datasource.warehouse.username=${DB_USER_WAREHOUSE:ubmiqzr7hgmt7m6p}
+spring.datasource.warehouse.password=${DB_PASS_WAREHOUSE:1EW9ArNVDdlS9VQW1DoA}
+spring.datasource.warehouse.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.warehouse.testWhileIdle=true
+spring.datasource.warehouse.validationQuery=SELECT 1
+spring.datasource.warehouse.type: com.zaxxer.hikari.HikariDataSource
+spring.jpa.database=default
