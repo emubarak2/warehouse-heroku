@@ -1,0 +1,8 @@
+https://warehouse-heroku.herokuapp.com/ | https://git.heroku.com/warehouse-heroku.git
+
+
+heroku config:set DATABASE_URL='mysql://b55f7f6f1aca3d:42995db3@us-cdbr-iron-east-03.cleardb.net/heroku_dd01bf1b773a3fe?reconnect=true'
+
+database name : heroku_dd01bf1b773a3fe
+user name : b55f7f6f1aca3d
+password : 42995db3
